@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gibrat AI — Magzhan Full Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #C9A96E; --bg: #0F111A; --card: #1A1D29; --text: #E0E0E0; --accent: #5D5FEF; --correct: #2ECC71; --wrong: #E74C3C; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 600px; min-height: 100vh; display: flex; flex-direction: column; border-left: 1px solid #333; border-right: 1px solid #333; position: relative; }
+        header { padding: 20px; text-align: center; border-bottom: 1px solid var(--primary); cursor: pointer; }
+        
+        /* MENU */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .menu-btn { background: var(--card); border: 1px solid #333; color: white; padding: 15px 5px; border-radius: 12px; cursor: pointer; text-align: center; transition: 0.3s; font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 70px; }
+        .menu-btn:hover { border-color: var(--primary); background: #232736; }
+        
+        .screen { display: none; padding: 20px; flex-grow: 1; flex-direction: column; animation: fadeIn 0.3s ease; }
+        .active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .content-box { background: #111; padding: 15px; border-radius: 10px; font-size: 0.95rem; line-height: 1.6; white-space: pre-line; border-left: 3px solid var(--primary); }
+        
+        /* SYMBOLS */
+        .symbol-card { background: var(--card); border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; }
+        .symbol-title { color: var(--primary); font-weight: bold; }
+        .symbol-desc { font-size: 0.85rem; display: none; margin-top: 8px; color: #BBB; border-top: 1px solid #333; padding-top: 8px; }
+
+        /* VIDEO */
+        .video-box { background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--primary); margin-top: 15px; position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .yt-btn { display: inline-block; margin-top: 10px; background: #FF0000; color: white; text-decoration: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 0.75rem; text-align: center; }
+
+        /* QUIZ */
+        .quiz-card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; }
+        .opt-btn { width: 100%; padding: 12px; margin: 8px 0; background: #252A3D; border: 1px solid #444; color: white; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .opt-btn.correct { background: var(--correct); }
+        .opt-btn.wrong { background: var(--wrong); }
+
+        /* CHAT */
+        .chat-box { flex-grow: 1; background: #000; border-radius: 10px; padding: 15px; margin-bottom: 15px; overflow-y: auto; height: 300px; border: 1px solid #222; display: flex; flex-direction: column; }
+        .msg { margin-bottom: 12px; max-width: 85%; padding: 10px 15px; border-radius: 15px; font-size: 0.85rem; }
+        .u-msg { align-self: flex-end; background: var(--accent); color: white; }
+        .ai-msg { align-self: flex-start; background: #222; border: 1px solid #333; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header onclick="showScreen('scr-menu')">
+        <h1 style="color:var(--primary); margin:0; font-family:'Cormorant Garamond'">GIBRAT AI</h1>
+        <p style="font-size: 0.7rem; opacity: 0.6; letter-spacing: 2px;">MAGZHAN FULL PLATFORM</p>
+    </header>
+
+    <div id="scr-menu" class="screen active">
+        <div class="menu-grid">
+            <div class="menu-btn" onclick="showScreen('scr-about')">✍️ Мағжан кім?</div>
+            <div class="menu-btn" onclick="showScreen('scr-poem')">📖 Өлең & Аудио</div>
+            <div class="menu-btn" onclick="showScreen('scr-symbols')">👁️ Символдар картасы</div>
+            <div class="menu-btn" onclick="showScreen('scr-storybook')">🎨 Storybook</div>
+            <div class="menu-btn" onclick="showScreen('scr-quiz')">🏆 Викторина</div>
+            <div class="menu-btn" onclick="showScreen('scr-chat')">💬 AI Ментор</div>
+            <div class="menu-btn" onclick="showScreen('scr-research')" style="grid-column: span 2;">🔬 Ғылыми жоба мәліметі</div>
+        </div>
+    </div>
+
+    <div id="scr-about" class="screen">
+        <h3 style="color:var(--primary)">Мағжан Жұмабаев (1893–1938)</h3>
+        <div class="content-box">
+            <b>Мағжан Жұмабаев</b> — қазақ әдебиетінің аса көрнекті өкілі, ақын, Алаш қозғалысының қайраткері.
+            • <b>«Қазақтың Пушкині»</b> деп аталған.
+            • <b>«Сүйемін» өлеңі:</b> 1922 жылы жазылған. Бұл шығармада ақын Отанды идеалды емес, барымен, шынайы қалпында сүюді жырлайды.
+        </div>
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary); margin-top:20px;">🏠 Артқа</p>
+    </div>
+
+    <div id="scr-poem" class="screen">
+        <h3>«Сүйемін» (Толық мәтін)</h3>
+        <div class="content-box" style="max-height: 300px; overflow-y: auto;">
+            Күлдей күңгірт шашы бар,
+            Тоқсан бесте жасы бар,
+            Көз дегенің – сұп-сұр көр.
+            Тасбиқ санап бүгіліп,
+            Жерге қарап үңіліп,
+            Көрше ауыр күрсінер,
+            Менің бір қарт анам бар,
+            Неге екенін білмеймін –
+            Сол анамды сүйемін!
+
+            Көзінде көк нұры жоқ,
+            Аузында жұмақ жыры жоқ,
+            Жалынсыз, усыз құшағы,
+            Иірілмейді жыландай,
+            Сөзі де жоқ құрандай,
+            Білгені – қазан-ошағы.
+            Жабайы ғана жарым бар,
+            Неге екенін білмеймін –
+            Сол жарымды сүйемін!
+
+            Ұйқы басқан қабағын,
+            Бастыра киген тымағын,
+            Жалқаулықты жар көрген.
+            Жүрген ескі заңымен,
+            Алдындағы малымен,
+            Бірге жусап, бірге өрген,
+            Алаш деген елім бар,
+            Неге екенін білмеймін –
+            Sol елімді сүйемін!
+
+            Сағымы сайран құрады,
+            Бораны ұлып тұрады,
+            Қыс – ақ кебін, жаз – сары.
+            Орманы жоқ, шуы жоқ,
+            Тауы да жоқ, суы жоқ,
+            Мәңгі өлік сахарасы.
+            Сарыарқа деген жерім бар,
+            Неге екенін білмеймін –
+            Сол Арқамды сүйемін!
+        </div>
+        
+        <div class="video-box">
+            <iframe src="https://www.youtube.com/embed/-fGJSBWhxVs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <center><a href="https://www.youtube.com/shorts/-fGJSBWhxVs" target="_blank" class="yt-btn">🔴 YouTube-тен ашу (Егер видео көрсетілмесе)</a></center>
+        
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary); margin-top:10px;">🏠 Артқа</p>
+    </div>
+
+    <div id="scr-symbols" class="screen">
+        <h3 style="color:var(--primary)">👁️ Символдар мағынасы</h3>
+        <div class="symbol-card" onclick="toggleSym(this)">
+            <div class="symbol-title">🪦 Сұп-сұр көр</div>
+            <div class="symbol-desc">Ананың көзін қабірге теңеу арқылы ақын сыртқы сұлулық емес, ішкі рухани байланыстың маңыздылығын көрсетеді.</div>
+        </div>
+        <div class="symbol-card" onclick="toggleSym(this)">
+            <div class="symbol-title">🥣 Қазан-ошақ</div>
+            <div class="symbol-desc">Жар бейнесіндегі бұл символ — қарапайым халықтық тұрмыс пен шынайы өмірдің белгісі.</div>
+        </div>
+        <div class="symbol-card" onclick="toggleSym(this)">
+            <div class="symbol-title">💤 Ұйқы басқан қабақ</div>
+            <div class="symbol-desc">Елдің сол кездегі енжарлығы мен тоқырауы. Бірақ ақын үшін өз елі осы күйінде де қымбат.</div>
+        </div>
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary); margin-top:20px;">🏠 Артқа</p>
+    </div>
+
+    <div id="scr-storybook" class="screen">
+        <h3>🎨 Storybook талдау</h3>
+        <div class="story-card" style="background:#111; padding:20px; border-radius:15px; border:1px dashed var(--primary); position:relative;">
+            <div class="badge" id="st-badge" style="position:absolute; top:-10px; right:10px; background:var(--primary); color:black; padding:2px 10px; border-radius:5px; font-size:0.7rem; font-weight:bold;">АНА</div>
+            <div id="st-text" style="font-style:italic; font-size:0.9rem; line-height:1.6; white-space:pre-line; min-height:100px;">...</div>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+            <button onclick="chStory(-1)" style="background:var(--card); border:1px solid #444; color:white; padding:10px 20px; border-radius:8px;">⬅️</button>
+            <span id="st-pg" style="color:var(--primary)">1 / 4</span>
+            <button onclick="chStory(1)" style="background:var(--card); border:1px solid #444; color:white; padding:10px 20px; border-radius:8px;">➡️</button>
+        </div>
+        <div id="st-anal" style="margin-top:15px; font-size:0.85rem; border-top:1px solid #333; padding-top:10px;"></div>
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; margin-top:20px;">🏠 Мәзір</p>
+    </div>
+
+    <div id="scr-quiz" class="screen">
+        <div style="text-align:center; font-size:1.2rem; color:var(--primary); font-weight:bold; margin-bottom:10px;" id="q-score">XP: 0</div>
+        <div class="quiz-card" id="q-area">
+            <h4 id="q-text">Сұрақ жүктелуде...</h4>
+            <div id="q-options"></div>
+        </div>
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary);">🏠 Басты мәзір</p>
+    </div>
+
+    <div id="scr-chat" class="screen">
+        <h3>💬 Gibrat AI Ментор</h3>
+        <div class="chat-box" id="chat-flow">
+            <div class="msg ai-msg">Сәлем! «Сүйемін» өлеңі туралы не білгің келеді?</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="chat-in" placeholder="Сұрақ жазыңыз..." style="flex-grow:1; padding:12px; border-radius:8px; border:1px solid #444; background:#111; color:white; outline:none;">
+            <button onclick="chat()" style="background:var(--primary); border:none; padding:10px 20px; border-radius:8px; font-weight:bold; cursor:pointer;">ส่ง</button>
+        </div>
+    </div>
+
+    <div id="scr-research" class="screen">
+        <h3>🔬 Ғылыми жоба</h3>
+        <div class="content-box">
+            <b>Зерттеуші:</b> Шарипов Нурасыл
+            <b>Мектеп:</b> №28 IT мектеп-лицейі.
+            <b>Тақырыбы:</b> «Сүйемін» өлеңіндегі анти-эстетикалық образдар.
+        </div>
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; margin-top:20px;">🏠 Артқа</p>
+    </div>
+</div>
+
+<script>
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'scr-storybook') updateS();
+        if(id === 'scr-quiz') restartQuiz();
+    }
+
+    function toggleSym(el) {
+        const desc = el.querySelector('.symbol-desc');
+        desc.style.display = desc.style.display === 'block' ? 'none' : 'block';
+    }
+
+    const STORIES = [
+        {b:"АНА", t:"Күлдей күңгірт шашы бар,\nТоқсан бесте жасы бар,\nКөз дегенің – сұп-сұр көр.", a:"Ана образы арқылы шынайы жақындық пен адалдық суреттеледі."},
+        {b:"ЖАР", t:"Көзінде көк нұры жоқ,\nБілгені – қазан-ошағы.", a:"Тұрмыстық қарапайымдылық — махаббаттың негізі."},
+        {b:"ЕЛ", t:"Ұйқы басқан қабағын,\nБастыра киген тымағын...", a:"Елдің жай-күйіне деген жанашырлық."},
+        {b:"ЖЕР", t:"Орманы жоқ, шуы жоқ,\nМәңгі өлік сахарасы.", a:"Туған жердің табиғатын барымен сүю."}
+    ];
+    let sIdx = 0;
+    function updateS() {
+        const s = STORIES[sIdx];
+        document.getElementById('st-badge').innerText = s.b;
+        document.getElementById('st-text').innerText = s.t;
+        document.getElementById('st-anal').innerHTML = `<b>Талдау:</b> ${s.a}`;
+        document.getElementById('st-pg').innerText = `${sIdx + 1} / 4`;
+    }
+    function chStory(v) { sIdx += v; if(sIdx<0) sIdx=0; if(sIdx>3) sIdx=3; updateS(); }
+
+    const QUIZ_DATA = [
+        { q: "Өлеңдегі Ананың көзі неге теңелген?", o: ["Жұлдызға", "Көрге", "Айға"], c: 1 },
+        { q: "Мағжан Сарыарқаны қалай атайды?", o: ["Мәңгі өлік сахара", "Жұмақ", "Шалқар көл"], c: 0 }
+    ];
+    let qIdx = 0, score = 0, quizActive = true;
+    function restartQuiz() { qIdx=0; score=0; quizActive=true; loadQ(); }
+    function loadQ() {
+        if(qIdx >= QUIZ_DATA.length) {
+            document.getElementById('q-area').innerHTML = "<h4>Аяқталды!</h4>"; return;
+        }
+        const data = QUIZ_DATA[qIdx];
+        document.getElementById('q-text').innerText = data.q;
+        let html = "";
+        data.o.forEach((opt, i) => html += `<button class="opt-btn" onclick="checkA(${i})">${opt}</button>`);
+        document.getElementById('q-options').innerHTML = html;
+    }
+    function checkA(idx) {
+        if(!quizActive) return; quizActive=false;
+        if(idx === QUIZ_DATA[qIdx].c) { score += 50; document.getElementById('q-score').innerText = "XP: " + score; }
+        setTimeout(() => { qIdx++; quizActive=true; loadQ(); }, 1000);
+    }
+
+    function chat() {
+        const inp = document.getElementById('chat-in'), flow = document.getElementById('chat-flow');
+        if(!inp.value) return;
+        flow.innerHTML += `<div class="msg u-msg">${inp.value}</div>`;
+        setTimeout(() => {
+            flow.innerHTML += `<div class="msg ai-msg">Бұл өте маңызды сұрақ. Мағжан туған жер мен елге деген адалдықты жырлаған.</div>`;
+            flow.scrollTop = flow.scrollHeight;
+        }, 600);
+        inp.value = "";
+    }
+</script>
+</body>
+</html>
