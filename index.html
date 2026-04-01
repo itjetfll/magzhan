@@ -27,6 +27,11 @@
         .symbol-title { color: var(--primary); font-weight: bold; }
         .symbol-desc { font-size: 0.85rem; display: none; margin-top: 8px; color: #BBB; border-top: 1px solid #333; padding-top: 8px; }
 
+        /* SOUL CARDS DESIGN */
+        .soul-card-display { background: var(--card); border-radius: 15px; padding: 10px; border: 1px solid var(--primary); text-align: center; margin-bottom: 15px; }
+        .soul-img { width: 100%; border-radius: 10px; margin-bottom: 10px; border: 1px solid #333; }
+        .card-meta { font-size: 0.8rem; color: var(--primary); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
         /* VIDEO */
         .video-box { background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--primary); margin-top: 15px; position: relative; padding-bottom: 56.25%; height: 0; }
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
@@ -59,10 +64,30 @@
             <div class="menu-btn" onclick="showScreen('scr-poem')">📖 Өлең & Аудио</div>
             <div class="menu-btn" onclick="showScreen('scr-symbols')">👁️ Символдар картасы</div>
             <div class="menu-btn" onclick="showScreen('scr-storybook')">🎨 Storybook</div>
+            <div class="menu-btn" onclick="showScreen('scr-soulcards')">✨ Soul Cards (New)</div>
             <div class="menu-btn" onclick="showScreen('scr-quiz')">🏆 Викторина</div>
             <div class="menu-btn" onclick="showScreen('scr-chat')">💬 AI Ментор</div>
             <div class="menu-btn" onclick="showScreen('scr-research')" style="grid-column: span 2;">🔬 Ғылыми жоба мәліметі</div>
         </div>
+    </div>
+
+    <div id="scr-soulcards" class="screen">
+        <h3 style="color:var(--primary)">✨ Soul Cards: Magjan Edition</h3>
+        <p style="font-size:0.8rem; margin-top:-10px; opacity:0.8;">Зерттеудің инновациялық өнімі</p>
+        
+        <div class="soul-card-display">
+            <div class="card-meta" id="soul-label">АНА</div>
+            <img src="soul_cards_main.jpg" alt="Soul Cards" class="soul-img" onerror="this.src='https://via.placeholder.com/400x250/1A1D29/C9A96E?text=Soul+Cards+Design'">
+            <div id="soul-quote" style="font-style:italic; font-size:0.9rem; margin-bottom:10px;">«Көз дегенің — сұп-сұр көр...»</div>
+            <div id="soul-desc" style="font-size:0.85rem; color:#BBB; border-top:1px solid #333; padding-top:10px;">Тереңдік пен тарихи жадтың символы.</div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; gap:10px;">
+            <button onclick="chSoul(-1)" style="flex:1; background:var(--card); border:1px solid #444; color:white; padding:10px; border-radius:8px;">⬅️ Алдыңғы</button>
+            <button onclick="chSoul(1)" style="flex:1; background:var(--card); border:1px solid #444; color:white; padding:10px; border-radius:8px;">Келесі ➡️</button>
+        </div>
+
+        <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary); margin-top:20px;">🏠 Артқа</p>
     </div>
 
     <div id="scr-about" class="screen">
@@ -122,7 +147,7 @@
         <div class="video-box">
             <iframe src="https://www.youtube.com/embed/-fGJSBWhxVs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <center><a href="https://www.youtube.com/shorts/-fGJSBWhxVs" target="_blank" class="yt-btn">🔴 YouTube-тен ашу (Егер видео көрсетілмесе)</a></center>
+        <center><a href="https://www.youtube.com/shorts/-fGJSBWhxVs" target="_blank" class="yt-btn">🔴 YouTube-тен ашу</a></center>
         
         <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; color:var(--primary); margin-top:10px;">🏠 Артқа</p>
     </div>
@@ -183,9 +208,8 @@
         <h3>🔬 Ғылыми жоба</h3>
         <div class="content-box">
             <b>Зерттеуші:</b> Шарипов Нурасыл
-            <b>Жетекші:</b> Ераділова Айдана Бақытқызы
             <b>Мектеп:</b> №28 IT мектеп-лицейі.
-            <b>Тақырыбы:</b> «Сүйемін» өлеңіндегі ұлттық құндылықтар коцептісі.
+            <b>Тақырыбы:</b> «Сүйемін» өлеңіндегі анти-эстетикалық образдар.
         </div>
         <p onclick="showScreen('scr-menu')" style="cursor:pointer; text-align:center; margin-top:20px;">🏠 Артқа</p>
     </div>
@@ -196,6 +220,7 @@
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         if(id === 'scr-storybook') updateS();
+        if(id === 'scr-soulcards') updateSoul();
         if(id === 'scr-quiz') restartQuiz();
     }
 
@@ -219,6 +244,21 @@
         document.getElementById('st-pg').innerText = `${sIdx + 1} / 4`;
     }
     function chStory(v) { sIdx += v; if(sIdx<0) sIdx=0; if(sIdx>3) sIdx=3; updateS(); }
+
+    /* SOUL CARDS LOGIC */
+    const SOUL_DATA = [
+        {l:"АНА", q:"«Көз дегенің — сұп-сұр көр...»", d:"Тереңдік пен тарихи жадтың символы. Сыртқы сұлулықтан биік рухани махаббат."},
+        {l:"ЖАР", q:"«Білгені — қазан-ошағы...»", d:"Иллюзиясыз шынайылық. Тұрмыстық адалдық пен қарапайым бақыт."},
+        {l:"ЖЕР", q:"«Неге екенін білмеймін — сүйемін!»", d:"Экзистенциалды таңдау. Отанды бар кемшілігімен, нысаналы түрде сүю."}
+    ];
+    let soulIdx = 0;
+    function updateSoul() {
+        const s = SOUL_DATA[soulIdx];
+        document.getElementById('soul-label').innerText = s.l;
+        document.getElementById('soul-quote').innerText = s.q;
+        document.getElementById('soul-desc').innerText = s.d;
+    }
+    function chSoul(v) { soulIdx += v; if(soulIdx<0) soulIdx=0; if(soulIdx>2) soulIdx=2; updateSoul(); }
 
     const QUIZ_DATA = [
         { q: "Өлеңдегі Ананың көзі неге теңелген?", o: ["Жұлдызға", "Көрге", "Айға"], c: 1 },
